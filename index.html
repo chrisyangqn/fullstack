@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Supabase Insert Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.5/dist/umd/supabase.min.js"></script>
+  </head>
+  <body>
+    <h1>Insert into Username</h1>
+    <form id="user-form">
+      <input name="username" placeholder="Username" required /><br />
+      <input name="first_name" placeholder="First Name" /><br />
+      <input name="last_name" placeholder="Last Name" /><br />
+      <input name="email" placeholder="Email" type="email" /><br />
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      const SUPABASE_URL = "https://ciplcterxzirmbkpzjdi.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpcGxjdGVyeHppcm1ia3B6amRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNDc2MDMsImV4cCI6MjA2MjkyMzYwM30.RapaiMlwYTLoUdg_Z5C-EKCfv0-tydXKlWjXCd6ULTw";
+
+      const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      const form = document.getElementById("user-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        const { data, error } = await client.from("Username").insert([
+          {
+            username: formData.get("username"),
+            first_name: formData.get("first_name"),
+            last_name: formData.get("last_name"),
+            email: formData.get("email"),
+          },
+        ]);
+
+        if (error) {
+          console.error("❌ 插入失败", error);
+          alert("❌ 插入失败：" + error.message);
+        } else {
+          console.log("✅ 插入成功", data);
+          alert("✅ 插入成功！");
+        }
+      });
+    </script>
+  </body>
+</html>
